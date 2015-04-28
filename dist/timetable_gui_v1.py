@@ -1,6 +1,9 @@
 from Tkinter import *
 from createsheet import create_timetable
 from getmodules import get_module_dict
+"""
+Deprecated (Also most probably broken)
+"""
 
 
 class AuthenticationBox():

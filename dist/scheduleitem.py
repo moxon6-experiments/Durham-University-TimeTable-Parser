@@ -25,6 +25,8 @@ class ScheduleItem():
             module_name, schedule_type ]
         weeks: list of weeks the item is on, e.g. if the item runs
             from weeks 11-20, then weeks = [11,12,.....20]
+        weeks_string:
+            If item runs from weeks 11-20, then weeks_string is "11-20"
     """
 
     def __init__(self, day_number, time_hour, duration_hours, data, module_list):
@@ -73,6 +75,7 @@ class ScheduleItem():
             font_attributes = table_entry.findAll('font')[0].attrs
             font_color = font_attributes['color']
             if font_color == "#000000":
+                self.weeks_string = "Weeks: " + table_entry.string
                 self.weeks = self.parse_weeks(table_entry.string)
             elif font_color == "#00FF00":
                 self.lecturer = table_entry.string
@@ -94,7 +97,7 @@ class ScheduleItem():
         self.uid = self.uid = [
             self.day_string,
             self.time_string,
-            self.weeks,
+            self.weeks_string,
             self.module_code,
             self.schedule_type,
         ]
@@ -153,7 +156,7 @@ class ScheduleItem():
         """
         Returns a string representation of the uid
         """
-        return ", ".join([str(x) for x in self.uid])
+        return ", ".join([str(x) for x in self.uid[0:2]+self.uid[3:]])
 
     def __eq__(self, other):
         """

@@ -1,9 +1,12 @@
 from Tkinter import *
-from createsheet import create_timetable
+import createsheet
 from getmodules import get_module_dict
-
 from authenticationbox import AuthenticationBox
 from module_menu import ModuleMenu
+
+"""
+Root module for TimeTable Parser GUI
+"""
 
 
 class ModuleWindow(Frame):
@@ -19,7 +22,7 @@ class ModuleWindow(Frame):
     def timetable(self):
         module_list = [x.module.get().split(" - ")[0] for x in self.moduleBoxes if x.module.get() != ""]
         self.master.withdraw()
-        create_timetable(module_list, self.details)
+        createsheet.create_timetable(module_list, self.details)
         self.master.destroy()
 
     def mainloop(self, n=0):
@@ -45,5 +48,3 @@ def test():
 if __name__ == "__main__":
     # main()
     test()
-
-

@@ -1,0 +1,83 @@
+import getmodules
+import parse_timetable
+from utils import get_credentials
+
+def test():
+    return """['COMP1011/LECT/001 <11-16>', '150', 'Introduction to Programming Lecture', '11-16', 'Bradley, Dr S P', 'D/CG85']
+    ['COMP1011/PRAC/001', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/002', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/LECT/002', '150', 'Introduction to Programming Lecture', '11-20, 25-33, 39-41', 'Bradley, Dr S P', 'D/E005']
+    ['COMP1011/PRAC/003', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CM002-3']
+    ['COMP1011/PRAC/004', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/005', '30', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/ER151']
+    ['COMP1011/LECT/001 <17>', '150', 'Introduction to Programming Lecture', '17', 'Bradley, Dr S P', 'D/CG93']
+    ['COMP1011/PRAC/001', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/002', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/LECT/002', '150', 'Introduction to Programming Lecture', '11-20, 25-33, 39-41', 'Bradley, Dr S P', 'D/E005']
+    ['COMP1011/PRAC/003', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CM002-3']
+    ['COMP1011/PRAC/004', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/005', '30', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/ER151']
+    ['COMP1011/LECT/001 <18-20>', '150', 'Introduction to Programming Lecture', '18-20', 'Bradley, Dr S P', 'D/CG93']
+    ['COMP1011/PRAC/001', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/002', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/LECT/002', '150', 'Introduction to Programming Lecture', '11-20, 25-33, 39-41', 'Bradley, Dr S P', 'D/E005']
+    ['COMP1011/PRAC/003', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CM002-3']
+    ['COMP1011/PRAC/004', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/005', '30', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/ER151']
+    ['COMP1011/LECT/001 <25-33, 39-41>', '150', 'Introduction to Programming Lecture', '25-33, 39-41', 'Bradley, Dr S P', 'D/CLC013']
+    ['COMP1011/PRAC/001', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/002', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/LECT/002', '150', 'Introduction to Programming Lecture', '11-20, 25-33, 39-41', 'Bradley, Dr S P', 'D/E005']
+    ['COMP1011/PRAC/003', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CM002-3']
+    ['COMP1011/PRAC/004', '35', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/CG66']
+    ['COMP1011/PRAC/005', '30', 'Introduction to Programming Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF05', 'D/ER151']
+    ['COMP1011/WORK/001', '75', 'Introduction to Programming Workshop', '45-47', 'Bradley, Dr S P, Ivressimtzis, Dr I', 'D/E216A-B']
+    ['COMP1011/WORK/002', '75', 'Introduction to Programming Workshop', '45-47', 'Ivressimtzis, Dr I, Bradley, Dr S P', 'D/E216A-B']
+    ['COMP1021/LECT/001', '60', 'Mathematics for Computer Science Lecture', '11-20', 'Gadouleau, Dr M, Mertzios, Dr G, Krokhin, Prof A', 'D/E102']
+    ['COMP1021/LECT/002', '60', 'Mathematics for Computer Science Lecture', '11-20', 'Gadouleau, Dr M, Mertzios, Dr G, Krokhin, Prof A', 'D/E102']
+    ['COMP1021/PRAC/002', '30', 'Mathematics for Computer Science Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF01', 'D/PCL050']
+    ['COMP1021/PRAC/001', '30', 'Mathematics for Computer Science Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF01', 'D/PCL050']
+    ['COMP1021/LECT/003', '60', 'Mathematics for Computer Science Lecture', '25-33, 39-41', 'Gadouleau, Dr M, Mertzios, Dr G, Paulusma, Dr D, Krokhin, Prof A', 'D/E102']
+    ['COMP1021/LECT/004', '60', 'Mathematics for Computer Science Lecture', '25-33, 39-41', 'Gadouleau, Dr M, Mertzios, Dr G, Paulusma, Dr D, Krokhin, Prof A', 'D/E102']
+    ['COMP1021/PRAC/002', '30', 'Mathematics for Computer Science Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF01', 'D/PCL050']
+    ['COMP1021/PRAC/001', '30', 'Mathematics for Computer Science Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF01', 'D/PCL050']
+    ['COMP1051/LECT/001', '100', 'Computational Thinking Lecture', '11-20, 25-33, 39-41', 'Mertzios, Dr G, Gadouleau, Dr M, Theodoropoulos, Prof  G, Dantchev, Dr S S', 'D/W309']
+    ['COMP1051/PRAC/002', '30', 'Computational Thinking Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF02', 'D/CG65']
+    ['COMP1051/LECT/002', '100', 'Computational Thinking Lecture', '11-20, 25-33, 39-41', 'Mertzios, Dr G, Gadouleau, Dr M, Theodoropoulos, Prof  G, Dantchev, Dr S S', 'D/CM101']
+    ['COMP1051/PRAC/003', '30', 'Computational Thinking Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF02', 'D/CG66']
+    ['COMP1051/PRAC/001', '30', 'Computational Thinking Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF02', 'D/CM002-3']
+    ['COMP1071/LECT/001', '70', 'Computer Systems Lecture', '11-20, 25-33, 39-41', 'Bordewich, Dr M, Gadouleau, Dr M, Breckon, Dr T', 'D/CG60']
+    ['COMP1071/LECT/002', '70', 'Computer Systems Lecture', '11-20, 25-33, 39-41', 'Bordewich, Dr M, Gadouleau, Dr M, Breckon, Dr T', 'D/CG60']
+    ['COMP1071/PRAC/002', '35', 'Computer Systems Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF03', 'D/CG66']
+    ['COMP1071/PRAC/001', '35', 'Computer Systems Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF03', 'D/CG66']
+    ['COMP1081/LECT/001', '60', 'Algorithms and Data Structures Lecture', '11-20, 25-33, 39-41', 'Ivressimtzis, Dr I, Johnson, Dr M', 'D/E101']
+    ['COMP1081/PRAC/002', '20', 'Algorithms and Data Structures Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF04', 'D/CM003']
+    ['COMP1081/PRAC/001', '30', 'Algorithms and Data Structures Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF04', 'D/CG66']
+    ['COMP1081/LECT/002', '60', 'Algorithms and Data Structures Lecture', '11-20, 25-33, 39-41', 'Ivressimtzis, Dr I, Johnson, Dr M', 'D/E101']
+    ['COMP2181/LECT/001', '50', 'Theory of Computation Lecture', '11-20, 25-33, 39-41', 'Dantchev, Dr S S, Gadouleau, Dr M, Mertzios, Dr G', 'D/CM101']
+    ['COMP2181/LECT/002', '50', 'Theory of Computation Lecture', '11-20, 25-33, 39-41', 'Dantchev, Dr S S, Gadouleau, Dr M, Mertzios, Dr G', 'D/W309']
+    ['COMP2181/PRAC/001', '25', 'Theory of Computation Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF06', 'D/PCL050']
+    ['COMP2181/PRAC/002', '25', 'Theory of Computation Practical', '11-20, 25-33, 39-41', 'COMPPGSTAFF06', 'D/E101']
+    ['COMP2191/WORK/001', '55', 'Software Engineering Workshop', '11-20, 25-33', 'Drummond, Dr S A', 'D/E102']
+    ['COMP2191/LECT/001', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2191/PRAC/001', '48', 'Software Engineering Practical', '11, 13, 15, 17, 19, 25, 27, 29, 31, 33', 'Drummond, Dr S A, COMPPGSTAFF07', 'D/E216A']
+    ['COMP2191/LECT/002', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2191/WORK/001', '55', 'Software Engineering Workshop', '11-20, 25-33', 'Drummond, Dr S A', 'D/E102']
+    ['COMP2191/LECT/001', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2191/LECT/002', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2191/LECT/001', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2191/LECT/002', '55', 'Software Engineering Lecture', '11-20, 25-33, 39-41', 'Drummond, Dr S A, Budgen, Prof D', 'D/E102']
+    ['COMP2201/LECT/001', '40', 'Group Project Lecture', '11-20, 25, 28-33', 'Obara, Dr B, Drummond, Dr S A', 'D/W205']
+    ['COMP2201/PRAC/001', '40', 'Group Project Practical', '11-20, 25, 28-33, 39', 'Mertzios, Dr G, Drummond, Dr S A, COMPPGSTAFF07', 'D/E216A']
+    ['COMP2201/LECT/002', '40', 'Group Project Lecture', '11-20, 25-33', 'Obara, Dr B, Drummond, Dr S A', 'D/E102']
+    ['COMP2201/ADD/001', '40', 'Group Project Lecture', '26-27', 'D/EH202']"""
+
+
+credentials = get_credentials()
+
+
+
+modules = getmodules.get_module_dict(credentials[0],credentials[1])
+module_codes = [x.split(" - ")[0] for x in modules['COMP'][0:6]]
+schedule_items = parse_timetable.get_schedule_items(module_codes, credentials)
+

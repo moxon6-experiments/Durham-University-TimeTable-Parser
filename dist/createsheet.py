@@ -71,7 +71,6 @@ def create_timetable(module_list, details):
     schedule_items = lectures + tutorials
     schedule_items = check_clashes(schedule_items)
     make_spreadsheet(schedule_items)
-    return schedule_items
 
 
 def check_clashes(schedule_items):
@@ -197,5 +196,16 @@ def get_input(message):
         raise SystemExit
 
 
+def test():
+    from utils import get_credentials
+    module_list = ["COMP2181"]
+    details = get_credentials()
+    create_timetable(module_list, details)
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    test()
+
+
+

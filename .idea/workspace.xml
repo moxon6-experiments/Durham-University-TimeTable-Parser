@@ -4,13 +4,9 @@
     <list default="true" id="e6d093e6-5489-443c-9fd9-b564ba05aa35" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Documentation/_build/html/.buildinfo" afterPath="$PROJECT_DIR$/Documentation/_build/html/.buildinfo" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Documentation/conf.py" afterPath="$PROJECT_DIR$/Documentation/conf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/createsheet.py" afterPath="$PROJECT_DIR$/dist/createsheet.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Documentation/_build/html/genindex.html" afterPath="$PROJECT_DIR$/Documentation/_build/html/genindex.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Documentation/_build/html/index.html" afterPath="$PROJECT_DIR$/Documentation/_build/html/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/scheduleitem.py" afterPath="$PROJECT_DIR$/dist/scheduleitem.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Documentation/_build/html/search.html" afterPath="$PROJECT_DIR$/Documentation/_build/html/search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/timetable_gui_v1.py" afterPath="$PROJECT_DIR$/dist/timetable_gui_v1.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/timetable_gui_v2.py" afterPath="$PROJECT_DIR$/dist/timetable_gui_v2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/utils.py" afterPath="$PROJECT_DIR$/dist/utils.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>

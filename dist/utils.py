@@ -13,10 +13,12 @@ def clear():
 
 def get_credentials():
     try:
-        credentials = open('C:\users\martin\desktop\sensitive\sensitive.txt').readlines()
-    except:
-        u = raw_input('input username:')
-        p = raw_input('input password:')
+
+        credentials = open(os.getenv('UserProfile') + "\\Desktop\\Sensitive\\sensitive.txt").read().splitlines()
+    except IOError, e:
+        print str(e)
+        u = raw_input('Input username:')
+        p = raw_input('Input password:')
         credentials = [u, p]
     return credentials
 

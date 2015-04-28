@@ -1,0 +1,237 @@
+<html>
+<head>
+<title>createsheet.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); font-weight: bold; }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(98,151,85); font-style: italic; }
+.s3 { color: rgb(204,120,50); }
+.s4 { color: rgb(165,194,97); }
+.s5 { color: rgb(104,151,187); }
+.s6 { color: rgb(128,128,128); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+createsheet.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">from </span><span class="s1">parse_timetable </span><span class="s0">import </span><span class="s1">get_schedule_items 
+</span><span class="s0">from </span><span class="s1">utils </span><span class="s0">import </span><span class="s1">get_days 
+</span><span class="s0">from </span><span class="s1">excel_autofit </span><span class="s0">import </span><span class="s1">auto_fit_columns 
+</span><span class="s0">from </span><span class="s1">utils </span><span class="s0">import </span><span class="s1">clear 
+</span><span class="s0">import </span><span class="s1">xlwt 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">organise_by_module(tutorials): 
+    </span><span class="s2">&quot;&quot;&quot; 
+    Takes a list of Tutorial Schedule Objects and 
+    returns a dictionary of module:tutorial 
+    &quot;&quot;&quot;</span><span class="s1"> 
+    tutorial_dict = {} 
+    </span><span class="s0">for </span><span class="s1">tutorial </span><span class="s0">in </span><span class="s1">tutorials: 
+        </span><span class="s0">if </span><span class="s1">tutorial.module_code </span><span class="s0">not in </span><span class="s1">tutorial_dict: 
+            tutorial_dict[tutorial.module_code] = [tutorial] 
+        </span><span class="s0">else</span><span class="s1">: 
+            tutorial_dict[tutorial.module_code].append(tutorial) 
+    </span><span class="s0">return </span><span class="s1">tutorial_dict 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">manage_tutorials(tutorials): 
+    </span><span class="s2">&quot;&quot;&quot; 
+    Takes a list of Tutorial Schedule Objects, 
+    asks the user which tutorials are applicable 
+    and returns this subset list of tutorials 
+    &quot;&quot;&quot;</span><span class="s1"> 
+    tutorial_dict = organise_by_module(tutorials) 
+    sorted_tutorials = tutorial_dict.values() 
+    tutorials_out = set() 
+    </span><span class="s0">for </span><span class="s1">module </span><span class="s0">in </span><span class="s1">sorted_tutorials: 
+        module.sort(key=</span><span class="s0">lambda </span><span class="s1">y: [y.day_number</span><span class="s3">, </span><span class="s1">y.time_hour]) 
+        clear() 
+        verifying = True 
+        </span><span class="s0">while </span><span class="s1">verifying: 
+            </span><span class="s0">print </span><span class="s4">&quot;Please Input Values (comma separated) of the Non-Lecture Items that Apply to You&quot;</span><span class="s1"> 
+            print_outs = [] 
+            </span><span class="s0">for </span><span class="s1">tutorial </span><span class="s0">in </span><span class="s1">module: 
+                </span><span class="s0">if </span><span class="s1">tutorial.to_string() </span><span class="s0">not in </span><span class="s1">print_outs: 
+                    </span><span class="s0">print </span><span class="s1">str(module.index(tutorial)+</span><span class="s5">1</span><span class="s1">)+</span><span class="s4">&quot;.&quot;</span><span class="s1">+tutorial.to_string() 
+                    print_outs.append(tutorial.to_string()) 
+            string_values = get_input(</span><span class="s4">&quot;Input Values:&quot;</span><span class="s1">) 
+            </span><span class="s0">try</span><span class="s1">: 
+                values = [int(x) </span><span class="s0">for </span><span class="s1">x </span><span class="s0">in </span><span class="s1">string_values.split(</span><span class="s4">&quot;,&quot;</span><span class="s1">)] 
+                verifying = False 
+                </span><span class="s0">for </span><span class="s1">x </span><span class="s0">in </span><span class="s1">values: 
+                    tutorials_out.add(module[x-</span><span class="s5">1</span><span class="s1">]) 
+            </span><span class="s0">except</span><span class="s1">: 
+                </span><span class="s0">print </span><span class="s4">&quot;InputError:&quot;</span><span class="s1"> 
+                </span><span class="s0">print </span><span class="s1">string_values 
+                </span><span class="s0">print </span><span class="s4">&quot;Invalid Input, try again&quot;</span><span class="s1"> 
+                verifying = True 
+    </span><span class="s0">return </span><span class="s1">list(tutorials_out) 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">create_timetable(module_list</span><span class="s3">, </span><span class="s1">details): 
+    </span><span class="s2">&quot;&quot;&quot; 
+    Takes a list of module code strings and an array of 
+    [username,password], and generates a spreadsheet file 
+    corresponding to the weekly timetable of that user 
+    &quot;&quot;&quot;</span><span class="s1"> 
+    schedule_items = get_schedule_items(module_list</span><span class="s3">, </span><span class="s1">details) 
+    lectures = [] 
+    tutorials = [] 
+    </span><span class="s0">for </span><span class="s1">schedule_item </span><span class="s0">in </span><span class="s1">schedule_items: 
+        </span><span class="s0">if </span><span class="s1">schedule_item.schedule_type == </span><span class="s4">&quot;LECT&quot;</span><span class="s1">: 
+            lectures.append(schedule_item) 
+        </span><span class="s0">else</span><span class="s1">: 
+            tutorials.append(schedule_item) 
+    tutorials = manage_tutorials(tutorials) 
+    schedule_items = lectures + tutorials 
+    schedule_items = check_clashes(schedule_items) 
+    make_spreadsheet(schedule_items) 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">check_clashes(schedule_items): 
+    </span><span class="s2">&quot;&quot;&quot; 
+    Iterates through schedule objects currently registered 
+    and checks which weeks those schedule objects clash (if any). 
+    For each week that the two clash, ask the user which item to keep 
+    &quot;&quot;&quot;</span><span class="s1"> 
+    clear() 
+    </span><span class="s0">for </span><span class="s1">comp1 </span><span class="s0">in </span><span class="s1">schedule_items: 
+        </span><span class="s0">for </span><span class="s1">comp2 </span><span class="s0">in </span><span class="s1">schedule_items: 
+            clash_weeks = comp1.clash(comp2) 
+            </span><span class="s0">if </span><span class="s1">clash_weeks </span><span class="s0">is not </span><span class="s1">None: 
+                </span><span class="s0">for </span><span class="s1">week </span><span class="s0">in </span><span class="s1">clash_weeks: 
+                    </span><span class="s0">print </span><span class="s4">&quot;TimeTable Clash on week: %s&quot; </span><span class="s1">% str(week) 
+                    </span><span class="s0">print </span><span class="s4">&quot;1.&quot; </span><span class="s1">+ comp1.to_string()[</span><span class="s5">0</span><span class="s3">,</span><span class="s5">2</span><span class="s1">:] 
+                    </span><span class="s0">print </span><span class="s4">&quot;2.&quot; </span><span class="s1">+ comp2.to_string()[</span><span class="s5">0</span><span class="s3">,</span><span class="s5">2</span><span class="s1">:] 
+                    keep = get_input(</span><span class="s4">&quot;Input Item to Keep: &quot;</span><span class="s1">) 
+                    </span><span class="s0">if </span><span class="s1">keep[</span><span class="s5">0</span><span class="s1">] + </span><span class="s4">&quot; &quot; </span><span class="s1">== </span><span class="s4">&quot;1&quot;</span><span class="s1">: 
+                        comp2.weeks.remove(week) 
+                    </span><span class="s0">else</span><span class="s1">: 
+                        comp1.weeks.remove(week) 
+    clear() 
+    </span><span class="s0">return </span><span class="s1">schedule_items 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">make_spreadsheet(schedule_items): 
+    workbook</span><span class="s3">, </span><span class="s1">worksheets = get_default_book() 
+    styles = { 
+        </span><span class="s5">1</span><span class="s1">: get_color_style(</span><span class="s4">'red'</span><span class="s1">)</span><span class="s3">,</span><span class="s1"> 
+        </span><span class="s5">2</span><span class="s1">: get_color_style(</span><span class="s4">'light_orange'</span><span class="s1">)</span><span class="s3">,</span><span class="s1"> 
+        </span><span class="s5">3</span><span class="s1">: get_color_style(</span><span class="s4">'yellow'</span><span class="s1">)</span><span class="s3">,</span><span class="s1"> 
+        </span><span class="s5">4</span><span class="s1">: get_color_style(</span><span class="s4">'bright_green'</span><span class="s1">)</span><span class="s3">,</span><span class="s1"> 
+        </span><span class="s5">5</span><span class="s1">: get_color_style(</span><span class="s4">'ocean_blue'</span><span class="s1">)</span><span class="s3">,</span><span class="s1"> 
+        </span><span class="s5">6</span><span class="s1">: get_color_style(</span><span class="s4">'violet'</span><span class="s1">) 
+        } 
+    </span><span class="s0">for </span><span class="s1">schedule_item </span><span class="s0">in </span><span class="s1">schedule_items: 
+        </span><span class="s0">for </span><span class="s1">week </span><span class="s0">in </span><span class="s1">schedule_item.weeks: 
+            </span><span class="s0">try</span><span class="s1">: 
+                worksheets[week].write(schedule_item.time_hour+</span><span class="s5">1</span><span class="s3">,</span><span class="s1"> 
+                                       schedule_item.day_number+</span><span class="s5">1</span><span class="s3">,</span><span class="s1"> 
+                                       schedule_item.module_name</span><span class="s3">,</span><span class="s1"> 
+                                       styles[schedule_item.module_number]) 
+            </span><span class="s0">except </span><span class="s1">Exception</span><span class="s3">, </span><span class="s1">e: 
+                clear() 
+                </span><span class="s0">print </span><span class="s1">str(e) 
+                </span><span class="s0">print </span><span class="s1">schedule_item.to_string() 
+                get_input(</span><span class="s4">''</span><span class="s1">) 
+            </span><span class="s0">if </span><span class="s1">schedule_item.duration != </span><span class="s5">1</span><span class="s1">: 
+                worksheets[week].merge(schedule_item.time_hour+</span><span class="s5">1</span><span class="s3">,</span><span class="s1"> 
+                                       schedule_item.time_hour+schedule_item.duration</span><span class="s3">,</span><span class="s1"> 
+                                       schedule_item.day_number+</span><span class="s5">1</span><span class="s3">,</span><span class="s1"> 
+                                       schedule_item.day_number+</span><span class="s5">1</span><span class="s1">) 
+    </span><span class="s0">try</span><span class="s1">: 
+        file_name = get_input(</span><span class="s4">'Input File Output name: '</span><span class="s1">) 
+        file_name = file_name.replace(</span><span class="s4">&quot;.xlsx&quot;</span><span class="s3">, </span><span class="s4">&quot;&quot;</span><span class="s1">) 
+        file_name = file_name.replace(</span><span class="s4">&quot;.xls&quot;</span><span class="s3">, </span><span class="s4">&quot;&quot;</span><span class="s1">) 
+        file_name = file_name.split(</span><span class="s4">&quot;.&quot;</span><span class="s1">)[</span><span class="s5">0</span><span class="s1">] 
+        file_name += </span><span class="s4">&quot;.xls&quot;</span><span class="s1"> 
+        workbook.save(file_name) 
+        </span><span class="s0">try</span><span class="s1">: 
+            auto_fit_columns(file_name) 
+        </span><span class="s0">except </span><span class="s1">Exception</span><span class="s3">, </span><span class="s1">e: 
+            </span><span class="s0">print </span><span class="s4">&quot;AutoFitting Columns Failed&quot;</span><span class="s1"> 
+            </span><span class="s0">print </span><span class="s1">str(e) 
+ 
+    </span><span class="s0">except </span><span class="s1">Exception</span><span class="s3">, </span><span class="s1">e: 
+        </span><span class="s0">print </span><span class="s1">str(e) 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">get_default_style(): 
+    style = xlwt.XFStyle() 
+    </span><span class="s6"># borders</span><span class="s1"> 
+    borders = xlwt.Borders() 
+    borders.left = borders.right = borders.top = borders.bottom = xlwt.Borders.THIN 
+    style.borders = borders 
+    </span><span class="s0">return </span><span class="s1">style 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">get_color_style(color): 
+    style = get_default_style() 
+    pattern = xlwt.Pattern() 
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN 
+    pattern.pattern_fore_colour = xlwt.Style.colour_map[color] 
+    style.pattern = pattern 
+    </span><span class="s0">return </span><span class="s1">style 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">get_default_book(weeks=range(</span><span class="s5">11</span><span class="s3">, </span><span class="s5">53</span><span class="s1">)): 
+    style = get_default_style() 
+    workbook = xlwt.Workbook() 
+    worksheets = {} 
+    </span><span class="s0">for </span><span class="s1">sheet_number </span><span class="s0">in </span><span class="s1">weeks: 
+        worksheets[sheet_number] = workbook.add_sheet(</span><span class="s4">'Week %s' </span><span class="s1">% sheet_number</span><span class="s3">, </span><span class="s1">cell_overwrite_ok=True) 
+        days = get_days() 
+        </span><span class="s0">for </span><span class="s1">x </span><span class="s0">in </span><span class="s1">range(</span><span class="s5">1</span><span class="s3">, </span><span class="s5">6</span><span class="s1">): 
+            worksheets[sheet_number].write(</span><span class="s5">1</span><span class="s3">, </span><span class="s1">x + </span><span class="s5">1</span><span class="s3">, </span><span class="s1">days[x]</span><span class="s3">, </span><span class="s1">style) 
+        </span><span class="s0">for </span><span class="s1">y </span><span class="s0">in </span><span class="s1">range(</span><span class="s5">2</span><span class="s3">, </span><span class="s5">12</span><span class="s1">): 
+            time = </span><span class="s4">&quot;0&quot; </span><span class="s1">* (</span><span class="s5">2 </span><span class="s1">- len(str(y + </span><span class="s5">7</span><span class="s1">))) + str(y + </span><span class="s5">7</span><span class="s1">) + </span><span class="s4">&quot;:00&quot;</span><span class="s1"> 
+            worksheets[sheet_number].write(y</span><span class="s3">, </span><span class="s5">1</span><span class="s3">, </span><span class="s1">time</span><span class="s3">, </span><span class="s1">style) 
+        </span><span class="s0">for </span><span class="s1">y </span><span class="s0">in </span><span class="s1">range(</span><span class="s5">2</span><span class="s3">, </span><span class="s5">7</span><span class="s1">): 
+            </span><span class="s0">for </span><span class="s1">x </span><span class="s0">in </span><span class="s1">range(</span><span class="s5">2</span><span class="s3">, </span><span class="s5">12</span><span class="s1">): 
+                worksheets[sheet_number].write(x</span><span class="s3">, </span><span class="s1">y</span><span class="s3">, </span><span class="s4">&quot;&quot;</span><span class="s3">, </span><span class="s1">style) 
+    </span><span class="s0">return </span><span class="s1">workbook</span><span class="s3">, </span><span class="s1">worksheets 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">main(): 
+    modules_string = get_input(</span><span class="s4">&quot;&quot;&quot;Input Comma Separated 
+                            module codes of the modules </span><span class="s3">\n</span><span class="s4"> 
+                            you wish to generate a timetable for </span><span class="s3">\n</span><span class="s4"> 
+                            Modules:&quot;&quot;&quot;</span><span class="s1">) 
+    module_list = modules_string.split(</span><span class="s4">&quot;,&quot;</span><span class="s1">) 
+    username = get_input(</span><span class="s4">&quot;Username:&quot;</span><span class="s1">) 
+    password = get_input(</span><span class="s4">'Password'</span><span class="s1">) 
+    create_timetable(module_list</span><span class="s3">, </span><span class="s1">[username</span><span class="s3">, </span><span class="s1">password]) 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">get_input(message): 
+    </span><span class="s0">try</span><span class="s1">: 
+        x = raw_input(message) 
+        </span><span class="s0">return </span><span class="s1">x 
+    </span><span class="s0">except</span><span class="s1">: 
+        </span><span class="s0">raise </span><span class="s1">SystemExit 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">test(): 
+    </span><span class="s0">from </span><span class="s1">utils </span><span class="s0">import </span><span class="s1">get_credentials 
+    module_list = [</span><span class="s4">&quot;COMP2181&quot;</span><span class="s1">] 
+    details = get_credentials() 
+    create_timetable(module_list</span><span class="s3">, </span><span class="s1">details) 
+ 
+ 
+</span><span class="s0">if </span><span class="s1">__name__ == </span><span class="s4">&quot;__main__&quot;</span><span class="s1">: 
+    </span><span class="s6"># main()</span><span class="s1"> 
+    test() 
+ 
+ 
+ 
+</span></pre>
+</body>
+</html>

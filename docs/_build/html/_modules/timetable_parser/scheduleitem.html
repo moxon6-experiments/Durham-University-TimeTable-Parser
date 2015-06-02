@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>timetable_parser.scheduleitem &mdash; project_name  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="project_name  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">project_name  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for timetable_parser.scheduleitem</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module Containing a Single Class: ScheduleItem</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">get_days</span>
+
+
+<div class="viewcode-block" id="ScheduleItem"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem">[docs]</a><span class="k">class</span> <span class="nc">ScheduleItem</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Object Representing a Single Element of a timetable</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        day_number: in [1,2,3,4,5]</span>
+<span class="sd">        day_string in [&quot;Monday&quot;,Tuesday....]</span>
+<span class="sd">        duration_hours in [1,2...] (usually 1 or 2)</span>
+<span class="sd">        hour_range: e.g. item at 11pm for 2 hours have hour range [11,12]</span>
+<span class="sd">        lecturer: e.g. &quot;Professor X&quot;</span>
+<span class="sd">        module_code: e.g. &quot;COMP1234&quot;</span>
+<span class="sd">        module_number: Integer mostly used for module ordering</span>
+<span class="sd">        room: e.g. &quot;E216A&quot;</span>
+<span class="sd">        schedule_title: e.g. &quot;Theory of Computation Lecture&quot;</span>
+<span class="sd">        schedule_type: e.g. Usually LECT or TUT</span>
+<span class="sd">        time_hour: in [1...7] (representing 9am to 5pm start times</span>
+<span class="sd">        time_string: Printable Representation of time, e.g. 18:00</span>
+<span class="sd">        uid [day_string, time_string,</span>
+<span class="sd">            module_name, schedule_type ]</span>
+<span class="sd">        weeks: list of weeks the item is on, e.g. if the item runs</span>
+<span class="sd">            from weeks 11-20, then weeks = [11,12,.....20]</span>
+<span class="sd">        weeks_string:</span>
+<span class="sd">            If item runs from weeks 11-20, then weeks_string is &quot;11-20&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day_number</span><span class="p">,</span> <span class="n">time_hour</span><span class="p">,</span> <span class="n">duration_hours</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">module_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        day_number: integer, in [1,2,3,4,5]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">day_number</span> <span class="o">=</span> <span class="n">day_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">day_string</span> <span class="o">=</span> <span class="n">get_days</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">day_number</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time_hour</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_time_string</span><span class="p">(</span><span class="n">time_hour</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration_hours</span> <span class="o">=</span> <span class="n">duration_hours</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hour_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_hour</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_hour</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_hours</span><span class="p">)</span>
+        <span class="n">table_entries</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;td&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parsing table_entries list:</span>
+<span class="sd">        -&gt;P:Find by array position</span>
+<span class="sd">        -&gt;C:Find by font color</span>
+<span class="sd">        ____________________________</span>
+<span class="sd">        P:Red:ModuleCode/ScheduleType</span>
+<span class="sd">        P:Blue: ???</span>
+<span class="sd">        P:Black:Module Title</span>
+
+<span class="sd">        C:Black:Week Numbers</span>
+<span class="sd">        C:Green:Lecturer</span>
+<span class="sd">        C:Brown: Room Numbers</span>
+<span class="sd">        ____________________________</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Entry 1 - Module Code and Schedule Type</span>
+        <span class="n">module_data</span> <span class="o">=</span> <span class="n">table_entries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_code</span> <span class="o">=</span> <span class="n">module_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_number</span> <span class="o">=</span> <span class="n">module_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_code</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_schedule_type</span><span class="p">(</span><span class="n">module_data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c"># Entry 2 - irrelevant</span>
+
+        <span class="c"># Entry 3 - Schedule Title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule_title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_schedule_title</span><span class="p">(</span><span class="n">table_entries</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
+        <span class="c"># Entries 4,5,6 - by Colour</span>
+        <span class="c"># Weeks   : #000000</span>
+        <span class="c"># Lecturer: #00FF00</span>
+        <span class="c"># Room    : #800000</span>
+        <span class="k">for</span> <span class="n">table_entry</span> <span class="ow">in</span> <span class="n">table_entries</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+            <span class="n">table_entry</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">table_entry</span><span class="p">))</span>
+            <span class="n">font_attributes</span> <span class="o">=</span> <span class="n">table_entry</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;font&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+            <span class="n">font_color</span> <span class="o">=</span> <span class="n">font_attributes</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">font_color</span> <span class="o">==</span> <span class="s">&quot;#000000&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weeks_string</span> <span class="o">=</span> <span class="s">&quot;Weeks: &quot;</span> <span class="o">+</span> <span class="n">table_entry</span><span class="o">.</span><span class="n">string</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weeks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_weeks</span><span class="p">(</span><span class="n">table_entry</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">font_color</span> <span class="o">==</span> <span class="s">&quot;#00FF00&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lecturer</span> <span class="o">=</span> <span class="n">table_entry</span><span class="o">.</span><span class="n">string</span>
+            <span class="k">elif</span> <span class="n">font_color</span> <span class="o">==</span> <span class="s">&quot;#800000&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">room</span> <span class="o">=</span> <span class="n">table_entry</span><span class="o">.</span><span class="n">string</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Schedule items are equivalent if they occur:</span>
+<span class="sd">            On the same day,</span>
+<span class="sd">            at the same time,</span>
+<span class="sd">            on the same week,</span>
+<span class="sd">            with the same module,</span>
+<span class="sd">            and the same type of module item</span>
+
+<span class="sd">            Therefore these attributes uniquely define</span>
+<span class="sd">            a Schedule Item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">day_string</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_string</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weeks_string</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">module_code</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule_type</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ScheduleItem.parse_weeks"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.parse_weeks">[docs]</a>    <span class="k">def</span> <span class="nf">parse_weeks</span><span class="p">(</span><span class="n">week_string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a string of form &quot;11-20,21-30&quot; and</span>
+<span class="sd">        return a list of form [11,12...20,21....30]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">week_numbers</span> <span class="o">=</span> <span class="n">week_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">week_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">week_numbers</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="p">)]</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span>
+                <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">exception</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span>
+                                            <span class="nb">range</span><span class="p">(</span><span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">week_numbers</span><span class="p">[</span><span class="n">week_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">weeks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">week_number</span> <span class="ow">in</span> <span class="n">week_numbers</span><span class="p">:</span>
+            <span class="n">weeks</span> <span class="o">+=</span> <span class="n">week_number</span>
+        <span class="k">return</span> <span class="n">weeks</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ScheduleItem.parse_schedule_title"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.parse_schedule_title">[docs]</a>    <span class="k">def</span> <span class="nf">parse_schedule_title</span><span class="p">(</span><span class="n">schedule_title</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a string defining the schedule title and standardises it</span>
+<span class="sd">        e.g. &quot;Tutorial A&quot; -&gt; &quot;Tutorial&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">schedule_title</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Tutorial A&quot;</span><span class="p">,</span> <span class="s">&quot;Tutorial&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">schedule_title</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ScheduleItem.parse_time_string"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.parse_time_string">[docs]</a>    <span class="k">def</span> <span class="nf">parse_time_string</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts integer time to String representation</span>
+<span class="sd">        e.g. 8.25 -&gt; &quot;8:15&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">minutes</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">time</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">))</span><span class="o">*</span><span class="mi">3</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="s">&quot;0&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">minutes</span><span class="p">))</span> <span class="o">+</span> <span class="n">minutes</span></div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ScheduleItem.set_schedule_type"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.set_schedule_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_schedule_type</span><span class="p">(</span><span class="n">schedule_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a string defining the type of schedule item and standardises it</span>
+<span class="sd">        e.g. &quot;LEC&quot; -&gt; &quot;LECT&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&#39;TUT&#39;</span> <span class="ow">in</span> <span class="n">schedule_type</span><span class="p">:</span>
+            <span class="n">schedule_type</span> <span class="o">=</span> <span class="s">&#39;TUT&#39;</span>
+        <span class="k">if</span> <span class="n">schedule_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;LECT&#39;</span><span class="p">,</span> <span class="s">&#39;LEC&#39;</span><span class="p">,</span> <span class="s">&#39;PROB&#39;</span><span class="p">,</span> <span class="s">&#39;ADD&#39;</span><span class="p">]:</span>
+            <span class="n">schedule_type</span> <span class="o">=</span> <span class="s">&#39;LECT&#39;</span>
+        <span class="k">return</span> <span class="n">schedule_type</span>
+</div>
+<div class="viewcode-block" id="ScheduleItem.to_string"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the uid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">[</span><span class="mi">3</span><span class="p">:]])</span>
+</div>
+<div class="viewcode-block" id="ScheduleItem.__eq__"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks for equality with another object</span>
+<span class="sd">        Objects are equal if they have the same hash value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hash__</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__hash__</span><span class="p">():</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="ScheduleItem.__hash__"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.__hash__">[docs]</a>    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a integer determined by the uid list</span>
+<span class="sd">        converts the list into a integer uniquely defined by its uid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hash_number_string</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">hash_number_string</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ScheduleItem.clash"><a class="viewcode-back" href="../../timetable_parser.scheduleitem.html#timetable_parser.scheduleitem.ScheduleItem.clash">[docs]</a>    <span class="k">def</span> <span class="nf">clash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether to ScheduleItems clash:</span>
+<span class="sd">        Checks for intersection of their hours and weeks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">!=</span> <span class="n">x</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">day_number</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">day_number</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hour_range</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">hour_range</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weeks</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">weeks</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weeks</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">weeks</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">project_name  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, author_name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

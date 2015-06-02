@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>timetable_parser.scheduleitem module &mdash; project_name  documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="project_name  documentation" href="index.html" />
+    <link rel="up" title="timetable_parser package" href="timetable_parser.html" />
+    <link rel="next" title="timetable_parser.timetable_gui_v1 module" href="timetable_parser.timetable_gui_v1.html" />
+    <link rel="prev" title="timetable_parser.project_exceptions module" href="timetable_parser.project_exceptions.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="timetable_parser.timetable_gui_v1.html" title="timetable_parser.timetable_gui_v1 module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="timetable_parser.project_exceptions.html" title="timetable_parser.project_exceptions module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">project_name  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="timetable_parser.html" accesskey="U">timetable_parser package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-timetable_parser.scheduleitem">
+<span id="timetable-parser-scheduleitem-module"></span><h1>timetable_parser.scheduleitem module<a class="headerlink" href="#module-timetable_parser.scheduleitem" title="Permalink to this headline">¶</a></h1>
+<p>Module Containing a Single Class: ScheduleItem</p>
+<dl class="class">
+<dt id="timetable_parser.scheduleitem.ScheduleItem">
+<em class="property">class </em><code class="descclassname">timetable_parser.scheduleitem.</code><code class="descname">ScheduleItem</code><span class="sig-paren">(</span><em>day_number</em>, <em>time_hour</em>, <em>duration_hours</em>, <em>data</em>, <em>module_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object Representing a Single Element of a timetable
+.. attribute:: day_number</p>
+<blockquote>
+<div>in [1,2,3,4,5]</div></blockquote>
+<dl class="attribute">
+<dt>
+<code class="descname">day_string in [&quot;Monday&quot;,Tuesday....]</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">duration_hours in [1,2...] (usually 1 or 2)</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.hour_range">
+<code class="descname">hour_range</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.hour_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. item at 11pm for 2 hours have hour range [11,12]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.lecturer">
+<code class="descname">lecturer</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.lecturer" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. &#8220;Professor X&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.module_code">
+<code class="descname">module_code</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.module_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. &#8220;COMP1234&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.module_number">
+<code class="descname">module_number</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.module_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer mostly used for module ordering</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.room">
+<code class="descname">room</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.room" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. &#8220;E216A&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.schedule_title">
+<code class="descname">schedule_title</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.schedule_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. &#8220;Theory of Computation Lecture&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.schedule_type">
+<code class="descname">schedule_type</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.schedule_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g. Usually LECT or TUT</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.time_hour">
+<code class="descname">time_hour</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.time_hour" title="Permalink to this definition">¶</a></dt>
+<dd><p>in [1...7] (representing 9am to 5pm start times</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.time_string">
+<code class="descname">time_string</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.time_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Printable Representation of time, e.g. 18:00</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">uid [day_string, time_string,</code></dt>
+<dd><p>module_name, schedule_type ]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.weeks">
+<code class="descname">weeks</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.weeks" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weeks the item is on, e.g. if the item runs
+from weeks 11-20, then weeks = [11,12,.....20]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.weeks_string">
+<code class="descname">weeks_string</code><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.weeks_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>If item runs from weeks 11-20, then weeks_string is &#8220;11-20&#8221;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.__eq__">
+<code class="descname">__eq__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for equality with another object
+Objects are equal if they have the same hash value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.__hash__">
+<code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a integer determined by the uid list
+converts the list into a integer uniquely defined by its uid</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.clash">
+<code class="descname">clash</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.clash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.clash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether to ScheduleItems clash:
+Checks for intersection of their hours and weeks</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.parse_schedule_title">
+<em class="property">static </em><code class="descname">parse_schedule_title</code><span class="sig-paren">(</span><em>schedule_title</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.parse_schedule_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.parse_schedule_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string defining the schedule title and standardises it
+e.g. &#8220;Tutorial A&#8221; -&gt; &#8220;Tutorial&#8221;</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.parse_time_string">
+<em class="property">static </em><code class="descname">parse_time_string</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.parse_time_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.parse_time_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts integer time to String representation
+e.g. 8.25 -&gt; &#8220;8:15&#8221;</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.parse_weeks">
+<em class="property">static </em><code class="descname">parse_weeks</code><span class="sig-paren">(</span><em>week_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.parse_weeks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.parse_weeks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string of form &#8220;11-20,21-30&#8221; and
+return a list of form [11,12...20,21....30]</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.set_schedule_type">
+<em class="property">static </em><code class="descname">set_schedule_type</code><span class="sig-paren">(</span><em>schedule_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.set_schedule_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.set_schedule_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a string defining the type of schedule item and standardises it
+e.g. &#8220;LEC&#8221; -&gt; &#8220;LECT&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.table_entries">
+<code class="descname">table_entries</code><em class="property"> = None</em><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.table_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parsing table_entries list:
+-&gt;P:Find by array position
+-&gt;C:Find by font color
+____________________________
+P:Red:ModuleCode/ScheduleType
+P:Blue: ???
+P:Black:Module Title</p>
+<p>C:Black:Week Numbers
+C:Green:Lecturer
+C:Brown: Room Numbers
+____________________________</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="timetable_parser.scheduleitem.ScheduleItem.to_string">
+<code class="descname">to_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timetable_parser/scheduleitem.html#ScheduleItem.to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#timetable_parser.scheduleitem.ScheduleItem.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string representation of the uid</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="timetable_parser.project_exceptions.html"
+                        title="previous chapter">timetable_parser.project_exceptions module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="timetable_parser.timetable_gui_v1.html"
+                        title="next chapter">timetable_parser.timetable_gui_v1 module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/timetable_parser.scheduleitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="timetable_parser.timetable_gui_v1.html" title="timetable_parser.timetable_gui_v1 module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="timetable_parser.project_exceptions.html" title="timetable_parser.project_exceptions module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">project_name  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="timetable_parser.html" >timetable_parser package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, author_name.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
